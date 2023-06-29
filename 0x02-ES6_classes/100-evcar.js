@@ -5,7 +5,7 @@ export default class EVCar extends Car {
     super(brand, motor, color);
     this.range = range;
   }
-  
+
   get range() {
     return this._range;
   }
