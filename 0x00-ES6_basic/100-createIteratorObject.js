@@ -26,5 +26,10 @@ export default function createIteratorObject(report) {
     }
   };
 
+  // Implementing the iterable interface
+  iterator[Symbol.iterator] = function () {
+    return this;
+  };
+
   return iterator;
 }
