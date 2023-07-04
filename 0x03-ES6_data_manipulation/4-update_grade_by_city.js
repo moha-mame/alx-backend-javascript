@@ -7,5 +7,4 @@ function updateStudentGradeByCity(students, city, newGrades) {
       return { ...student, grade };
     });
 }
-
 export default updateStudentGradeByCity;
