@@ -1,10 +1,16 @@
-export defaul class HolbertonCourse {
+export default class HolbertonCourse {
   constructor(name, length, students) {
-    this._name = this.validateString(name, 'name');
-    this._length = this.validateNumber(length, 'length');
-    this._students = this.validateArray(students, 'students');
-  }
+    if (Object.getPrototypeOf(name) !== String.prototype) throw TypeError('name must be a string');
+    if (Object.getPrototypeOf(length) !== Number.prototype) throw TypeError('length must be a number');
+    if (Object.getPrototypeOf(students) !== Array.prototype) throw TypeError('students must be an array of strings');
+    students.forEach((student) => {
+      if (Object.getPrototypeOf(student) !== String.prototype) throw TypeError('students must be an array of strings');
+    });
 
+    this._name = name;
+    this._length = length;
+    this._students = students;
+  }
   get name() {
     return this._name;
   }
