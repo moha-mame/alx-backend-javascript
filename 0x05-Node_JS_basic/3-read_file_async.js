@@ -1,30 +1,27 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 
-async function countStudents(path) {
-  try {
-    const data = await fs.readFile(path, 'utf-8');
-    const lines = data.trim().split('\n').slice(1); // Remove empty lines and header
-
-    console.log(`Number of students: ${lines.length}`);
-
-    const classToStudents = {};
-    lines.forEach((line) => {
-      const [name, age, nationality, className] = line.split(',');
-      if (!classToStudents[className]) {
-        classToStudents[className] = [];
+function countStudents(path) {
+  const promise = (res, rej) => {
+    fs.readFile(path, (err, data) => {
+      if (err) rej(Error('Cannot load the database'));
+      if (data) {
+        let newData = data.toString().split('\n');
+        newData = newData.slice(1, newData.length - 1);
+        console.log(`Number of students: ${newData.length}`);
+        const obj = {};
+        newData.forEach((el) => {
+          const student = el.split(',');
+          if (!obj[student[3]]) obj[student[3]] = [];
+          obj[student[3]].push(student[0]);
+        });
+        for (const cls in obj) {
+          if (cls) console.log(`Number of students in ${cls}: ${obj[cls].length}. List: ${obj[cls].join(', ')}`);
+        }
       }
-      classToStudents[className].push(name);
+      res();
     });
-
-    for (const cls in classToStudents) {
-      if (Object.prototype.hasOwnProperty.call(classToStudents, cls)) {
-        const students = classToStudents[cls].join(', ');
-        console.log(`Number of students in ${cls}: ${classToStudents[cls].length}. List: ${students}`);
-      }
-    }
-  } catch (error) {
-    throw new Error('Cannot load the database');
-  }
+  };
+  return new Promise(promise);
 }
 
 module.exports = countStudents;
